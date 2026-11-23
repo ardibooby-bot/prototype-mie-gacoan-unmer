@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype UI - Sistem Pelayanan Self-Service Mie Gacoan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --magenta: #E6007E;
+      --magenta-dark: #B80064;
+      --magenta-soft: #FDF2F8;
+      --blue: #009FE3;
+      --blue-soft: #E0F2FE;
+      --green: #10B981;
+      --green-soft: #ECFDF5;
+      --amber: #F59E0B;
+      --amber-soft: #FFFBEB;
+      --red: #EF4444;
+      --red-soft: #FEF2F2;
+      --bg: #F1F5F9;
+      --surface: #FFFFFF;
+      --surface-alt: #F8FAFC;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Switcher Bar */
+    .top-bar {
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .brand-badge {
+      background: var(--magenta);
+      color: #fff;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      background: #1E293B;
+      padding: 4px;
+      border-radius: 12px;
+    }
+
+    .mode-tab {
+      border: none;
+      background: transparent;
+      color: #CBD5E1;
+      padding: 7px 14px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-tab.active {
+      background: var(--magenta);
+      color: #FFFFFF;
+    }
+
+    .helper-hint {
+      font-size: 11.5px;
+      color: #94A3B8;
+    }
+
+    /* Main Workspace */
+    .workspace {
+      flex: 1;
+      padding: 24px 16px 48px;
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Customer Mobile Frame */
+    .phone-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 410px;
+      min-height: 760px;
+      background: var(--surface);
+      border-radius: 34px;
+      border: 8px solid #1E293B;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      background: #FFFFFF;
+      padding: 10px 20px 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .app-header {
+      padding: 10px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--magenta), #FF4DA6);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .logo-text h1 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .logo-text span {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .table-pill {
+      background: var(--blue-soft);
+      color: #0369A1;
+      font-weight: 700;
+      font-size: 11.5px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid #BAE6FD;
+    }
+
+    .screen {
+      display: none;
+      padding: 14px 16px 96px;
+      flex: 1;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Search & Category */
+    .search-box {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      font-size: 13px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: var(--magenta);
+      background: #FFFFFF;
+    }
+
+    .cat-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+
+    .cat-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-btn {
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .cat-btn.active {
+      background: var(--magenta);
+      color: #FFFFFF;
+      border-color: var(--magenta);
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    /* Menu Cards */
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-card {
+      display: flex;
+      gap: 12px;
+      padding: 11px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+      align-items: center;
+    }
+
+    .menu-card.sold-out {
+      opacity: 0.62;
+      background: #F8FAFC;
+    }
+
+    .menu-thumb {
+      width: 74px;
+      height: 74px;
+      border-radius: 12px;
+      background: var(--magenta-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .menu-card.sold-out .menu-thumb {
+      filter: grayscale(100%);
+      background: #E2E8F0;
+    }
+
+    .menu-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .menu-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .taste-tag {
+      display: inline-block;
+      margin-top: 3px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #0369A1;
+      background: var(--blue-soft);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .menu-desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    .menu-bottom {
+      margin-top: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-price {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .btn-add {
+      background: var(--magenta);
+      color: #FFFFFF;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 9px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-add:hover {
+      background: var(--magenta-dark);
+    }
+
+    .badge-soldout {
+      background: var(--red-soft);
+      color: var(--red);
+      border: 1px solid #FECACA;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    /* Floating Cart Bar */
+    .floating-cart {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 362px;
+      background: var(--magenta);
+      color: #FFFFFF;
+      padding: 12px 16px;
+      border-radius: 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 12px 24px -4px rgba(230, 0, 126, 0.45);
+      cursor: pointer;
+      z-index: 40;
+    }
+
+    .floating-cart.visible {
+      display: flex;
+    }
+
+    .cart-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-count {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: 600;
+    }
+
+    .cart-total {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .cart-cta {
+      font-size: 12.5px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 11px;
+      border-radius: 10px;
+    }
+
+    /* Bottom Sheet Modal for Customization */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 150;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .bottom-sheet {
+      width: 100%;
+      max-width: 394px;
+      background: #FFFFFF;
+      border-radius: 24px 24px 0 0;
+      padding: 18px 18px 24px;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .sheet-handle {
+      width: 38px;
+      height: 4px;
+      background: #CBD5E1;
+      border-radius: 999px;
+      margin: 0 auto 14px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 8px 0 14px;
+    }
+
+    .level-btn {
+      padding: 8px 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .level-btn.selected {
+      background: var(--magenta-soft);
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      margin-top: 6px;
+      margin-bottom: 14px;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px 8px;
+    }
+
+    .stepper button {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: var(--surface-alt);
+      border-radius: 7px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: none;
+      background: var(--magenta);
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--magenta-dark);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* Checkout, Payment & Tracking Cards */
+    .card-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px;
+      margin-bottom: 12px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px dashed var(--border);
+      font-size: 12.5px;
+    }
+
+    .cart-item-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: #FFFFFF;
+      margin-top: 8px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .qris-box {
+      text-align: center;
+      padding: 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 12px;
+    }
+
+    .qr-placeholder {
+      width: 156px;
+      height: 156px;
+      margin: 10px auto;
+      border-radius: 14px;
+      background:
+        repeating-linear-gradient(0deg, #0F172A 0 6px, #FFFFFF 6px 12px),
+        repeating-linear-gradient(90deg, #0F172A 0 6px, #FFFFFF 6px 12px);
+      background-blend-mode: difference;
+      border: 6px solid #0F172A;
+    }
+
+    .queue-banner {
+      background: linear-gradient(135deg, var(--blue), var(--magenta));
+      color: #FFFFFF;
+      padding: 18px;
+      border-radius: 18px;
+      text-align: center;
+      margin-bottom: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .queue-banner.ready {
+      background: linear-gradient(135deg, #059669, var(--green));
+      animation: pulseGlow 1.6s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45); }
+      50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    }
+
+    .queue-number {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin: 4px 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+
+    .step-item:last-child {
+      border-bottom: none;
+    }
+
+    .step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #E2E8F0;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .step-dot.done {
+      background: var(--green);
+      color: #FFFFFF;
+    }
+
+    .step-dot.active {
+      background: var(--magenta);
+      color: #FFFFFF;
+    }
+
+    /* Staff / Kitchen & Kasir View */
+    .staff-panel {
+      display: none;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .staff-panel.active {
+      display: block;
+    }
+
+    .staff-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 18px;
+    }
+
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    .ticket-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px;
+      background: var(--surface-alt);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ticket-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ticket-code {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--magenta);
+    }
+
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .st-unpaid { background: var(--red-soft); color: var(--red); }
+    .st-queue { background: var(--amber-soft); color: #B45309; }
+    .st-cooking { background: var(--blue-soft); color: #0369A1; }
+    .st-ready { background: var(--green-soft); color: #047857; }
+    .st-done { background: #E2E8F0; color: #334155; }
+
+    .ticket-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-dark { background: #1E293B; color: #fff; }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    @media (max-width: 600px) {
+      .phone-frame {
+        border-radius: 24px;
+        border-width: 5px;
+        min-height: 680px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="brand-title">
+      <span class="brand-badge">PROTOTYPE UI</span>
+      <span>Sistem Pelayanan Self-Service Mie Gacoan</span>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="switchMode('customer')">📱 Layar Pelanggan (QR)</button>
+      <button class="mode-tab" onclick="switchMode('staff')">👨‍🍳 Kitchen & Kasir (KDS/POS)</button>
+    </div>
+    <div class="helper-hint">Meja Aktif: <strong>B-12</strong> • Pick-up: <strong>Lantai 1</strong></div>
+  </header>
+
+  <main class="workspace">
+    <!-- CUSTOMER VIEW -->
+    <section id="customerView" class="phone-wrapper">
+      <div class="phone-frame">
+        <div class="status-bar">
+          <span>09:41</span>
+          <span>Mie Gacoan Self-Order</span>
+          <span>5G • 100%</span>
+        </div>
+
+        <div class="app-header">
+          <div class="logo-group">
+            <div class="logo-mark">G</div>
+            <div class="logo-text">
+              <h1>Gacoan Express</h1>
+              <span>Scan QR & Self-Pickup Lt. 1</span>
+            </div>
+          </div>
+          <div class="table-pill">Meja B-12</div>
+        </div>
+
+        <!-- SCREEN 1: MENU CATALOG -->
+        <div id="screenMenu" class="screen active">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-box"
+            placeholder="Cari mi, dimsum, atau es..."
+            oninput="renderMenu()"
+          />
+
+          <div class="cat-tabs">
+            <button class="cat-btn active" data-cat="Semua" onclick="selectCategory('Semua', this)">Semua</button>
+            <button class="cat-btn" data-cat="Mi" onclick="selectCategory('Mi', this)">🍜 Menu Mi</button>
+            <button class="cat-btn" data-cat="Dimsum" onclick="selectCategory('Dimsum', this)">🥟 Dimsum</button>
+            <button class="cat-btn" data-cat="Minuman" onclick="selectCategory('Minuman', this)">🧊 Minuman</button>
+          </div>
+
+          <div class="section-label">Daftar Menu Tersedia</div>
+          <div id="menuList" class="menu-list"></div>
+        </div>
+
+        <!-- SCREEN 2: CART & CHECKOUT -->
+        <div id="screenCheckout" class="screen">
+          <button class="btn-secondary" style="margin-top:0; margin-bottom:12px; width:auto; padding:6px 12px;" onclick="showScreen('screenMenu')">← Kembali ke Menu</button>
+          <div class="section-label">Keranjang & Checkout</div>
+
+          <div class="card-box">
+            <label style="font-size:12px; font-weight:700;">Nama Pemesan</label>
+            <input type="text" id="customerName" class="input-field" style="margin-bottom:10px;" value="Nabila Putri" placeholder="Masukkan nama Anda" />
+
+            <label style="font-size:12px; font-weight:700;">Tipe Layanan</label>
+            <div style="font-size:12px; color:var(--muted); margin-top:4px;">
+              Dine-In (Meja B-12) • Pengambilan mandiri di Rak Pick-up Lantai 1
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div style="font-size:12px; font-weight:700; margin-bottom:8px;">Rincian Pesanan</div>
+            <div id="cartItemsContainer"></div>
+          </div>
+
+          <div class="card-box">
+            <div style="font-size:12px; font-weight:700;">Metode Pembayaran</div>
+            <label class="radio-option">
+              <input type="radio" name="payMethod" value="QRIS" checked />
+              <span>💳 QRIS / E-Wallet (Instan Tanpa Antre Kasir)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="payMethod" value="Kasir" />
+              <span>💵 Bayar Tunai / Debit di Kasir</span>
+            </label>
+          </div>
+
+          <div class="card-box" style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:13px; font-weight:700;">Total Pembayaran</span>
+            <span id="checkoutTotal" style="font-size:16px; font-weight:800; color:var(--magenta);">Rp 0</span>
+          </div>
+
+          <button class="btn-primary" onclick="submitOrder()">Lanjut Pembayaran</button>
+        </div>
+
+        <!-- SCREEN 3: PAYMENT SIMULATION -->
+        <div id="screenPayment" class="screen">
+          <div class="section-label">Proses Pembayaran</div>
+          <div class="qris-box" id="paymentBox"></div>
+          <button id="btnConfirmPay" class="btn-primary" onclick="completePayment()">Simulasi Pembayaran Berhasil</button>
+          <button class="btn-secondary" onclick="showScreen('screenMenu')">Batalkan & Kembali ke Menu</button>
+        </div>
+
+        <!-- SCREEN 4: LIVE ORDER TRACKING -->
+        <div id="screenTracking" class="screen">
+          <div class="section-label">Live Tracking Pesanan</div>
+
+          <div id="queueBanner" class="queue-banner">
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.6px; opacity:0.9;">NOMOR ANTREAN ANDA</div>
+            <div id="trackQueueNumber" class="queue-number">A-042</div>
+            <div id="trackHeadline" style="font-size:13px; font-weight:700;">Menunggu Antrean Dapur</div>
+          </div>
+
+          <div class="card-box">
+            <div id="trackingSteps"></div>
+          </div>
+
+          <div id="pickupNoteBox" class="card-box" style="background:var(--blue-soft); border-color:#BAE6FD; font-size:12px; color:#0369A1;">
+            <strong>Info Pick-up:</strong> Pantau terus layar ini atau alihkan ke tab <strong>Kitchen & Kasir</strong> di atas untuk menyimulasikan proses masak hingga <strong>Siap Diambil di Lantai 1</strong>.
+          </div>
+
+          <button id="btnPickupConfirm" class="btn-primary" style="display:none; background:var(--green);" onclick="confirmPickedUp()">
+            ✓ Konfirmasi Pesanan Sudah Diambil
+          </button>
+
+          <button class="btn-secondary" onclick="startNewOrder()">+ Pesan Lagi (Meja B-12)</button>
+        </div>
+
+        <!-- Floating Cart -->
+        <div id="floatingCart" class="floating-cart" onclick="openCheckout()">
+          <div class="cart-left">
+            <span id="floatCount" class="cart-count">0 item</span>
+            <span id="floatTotal" class="cart-total">Rp 0</span>
+          </div>
+          <div class="cart-cta">Lihat Keranjang →</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAFF VIEW (KITCHEN & KASIR) -->
+    <section id="staffView" class="staff-panel">
+      <div class="staff-header">
+        <div>
+          <h2 style="font-size:18px; font-weight:800;">Panel Kitchen Display System (KDS) & Kasir</h2>
+          <p style="font-size:12.5px; color:var(--muted); margin-top:2px;">
+            Kelola tiket pesanan masuk, validasi pembayaran kasir, dan ubah status menjadi <strong>Siap Diambil</strong> untuk memanggil pelanggan di Lantai 1.
+          </p>
+        </div>
+        <button class="btn-sm btn-dark" style="flex:none;" onclick="switchMode('customer')">← Kembali ke HP Pelanggan</button>
+      </div>
+
+      <div id="staffOrdersGrid" class="orders-grid"></div>
+    </section>
+  </main>
+
+  <!-- Customization Modal -->
+  <div id="customModal" class="modal-backdrop">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+        <div>
+          <h3 id="modalTitle" style="font-size:16px; font-weight:800;">Mie Gacoan</h3>
+          <span id="modalTaste" class="taste-tag">Manis • Pedas • Gurih</span>
+        </div>
+        <div id="modalPrice" style="font-size:15px; font-weight:800; color:var(--magenta);">Rp 10.500</div>
+      </div>
+      <p id="modalDesc" style="font-size:12px; color:var(--muted); margin-top:8px; line-height:1.4;"></p>
+
+      <div id="spicySection">
+        <div style="font-size:12px; font-weight:700; margin-top:14px;">Pilih Level Pedas (Wajib)</div>
+        <div id="levelGrid" class="level-grid"></div>
+      </div>
+
+      <div style="font-size:12px; font-weight:700; margin-top:6px;">Catatan Tambahan (Opsional)</div>
+      <input type="text" id="itemNote" class="input-field" placeholder="Contoh: Tanpa bawang goreng..." />
+
+      <div class="qty-row">
+        <div class="stepper">
+          <button type="button" onclick="changeModalQty(-1)">−</button>
+          <span id="modalQty" style="font-size:13px; font-weight:800; min-width:18px; text-align:center;">1</span>
+          <button type="button" onclick="changeModalQty(1)">+</button>
+        </div>
+        <button type="button" class="btn-primary" style="flex:1;" onclick="addCustomizedToCart()">
+          Tambah ke Keranjang
+        </button>
+      </div>
+      <button type="button" class="btn-secondary" onclick="closeModal()">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    const MENU_DATA = [
+      {
+        id: 1,
+        name: "Mie Gacoan",
+        category: "Mi",
+        price: 10500,
+        taste: "Manis • Pedas • Gurih",
+        desc: "Mi manis pedas gurih dengan taburan ayam cincang & pangsit goreng.",
+        emoji: "🍜",
+        hasSpice: true,
+        available: true
+      },
+      {
+        id: 2,
+        name: "Mie Hompimpa",
+        category: "Mi",
+        price: 10500,
+        taste: "Gurih Asin • Pedas",
+        desc: "Mi gurih asin dengan sensasi pedas khas level cabai pilihan.",
+        emoji: "🌶️",
+        hasSpice: true,
+        available: true
+      },
+      {
+        id: 3,
+        name: "Mie Suit",
+        category: "Mi",
+        price: 10500,
+        taste: "Gurih Asin • Tidak Pedas",
+        desc: "Mi gurih asin tanpa cabai, cocok untuk anak atau penikmat rasa original.",
+        emoji: "🥢",
+        hasSpice: false,
+        available: true
+      },
+      {
+        id: 4,
+        name: "Udang Keju",
+        category: "Dimsum",
+        price: 9500,
+        taste: "Gurih • Renyah",
+        desc: "Olahan udang balut tepung roti renyah dengan isian keju lumer.",
+        emoji: "🧀",
+        hasSpice: false,
+        available: false
+      },
+      {
+        id: 5,
+        name: "Siomay Ayam",
+        category: "Dimsum",
+        price: 9500,
+        taste: "Gurih Lembut",
+        desc: "Dimsum kukus berbahan daging ayam pilihan, disajikan hangat.",
+        emoji: "🥟",
+        hasSpice: false,
+        available: true
+      },
+      {
+        id: 6,
+        name: "Es Gobak Sodor",
+        category: "Minuman",
+        price: 9500,
+        taste: "Segar • Manis",
+        desc: "Minuman segar perpaduan buah, cincau, dan nata de coco pereda pedas.",
+        emoji: "🧊",
+        hasSpice: false,
+        available: true
+      }
+    ];
+
+    const SPICE_LEVELS = ["Level 0", "Level 1", "Level 2", "Level 3", "Level 5", "Level 8"];
+
+    let selectedCategory = "Semua";
+    let activeMenuItem = null;
+    let selectedLevel = "Level 2";
+    let modalQty = 1;
+    let cart = [];
+    let orders = [
+      {
+        code: "A-041",
+        table: "Meja A-05",
+        customer: "Raka Pratama",
+        method: "QRIS",
+        status: "COOKING",
+        items: [
+          { name: "Mie Gacoan", spice: "Level 3", qty: 1, note: "", price: 10500 },
+          { name: "Es Gobak Sodor", spice: null, qty: 1, note: "", price: 9500 }
+        ]
+      }
+    ];
+    let queueCounter = 42;
+    let activeOrderId = null;
+
+    function formatRupiah(num) {
+      return "Rp " + num.toLocaleString("id-ID");
+    }
+
+    function switchMode(mode) {
+      document.querySelectorAll(".mode-tab").forEach((btn, idx) => {
+        btn.classList.toggle("active", (mode === "customer" && idx === 0) || (mode === "staff" && idx === 1));
+      });
+      document.getElementById("customerView").style.display = mode === "customer" ? "flex" : "none";
+      document.getElementById("staffView").classList.toggle("active", mode === "staff");
+      if (mode === "staff") {
+        renderStaffOrders();
+      } else {
+        updateFloatingCart();
+      }
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(sc => sc.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+      updateFloatingCart();
+    }
+
+    function selectCategory(cat, el) {
+      selectedCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      el.classList.add("active");
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = MENU_DATA.filter(item => {
+        const matchCat = selectedCategory === "Semua" || item.category === selectedCategory;
+        const matchText =
+          item.name.toLowerCase().includes(q) ||
+          item.taste.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q);
+        return matchCat && matchText;
+      });
+
+      const container = document.getElementById("menuList");
+      if (!filtered.length) {
+        container.innerHTML = `<div class="empty-state">Menu tidak ditemukan. Coba kata kunci lain.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => `
+        <div class="menu-card ${item.available ? "" : "sold-out"}">
+          <div class="menu-thumb">${item.emoji}</div>
+          <div class="menu-info">
+            <div class="menu-name">${item.name}</div>
+            <span class="taste-tag">${item.taste}</span>
+            <p class="menu-desc">${item.desc}</p>
+            <div class="menu-bottom">
+              <span class="menu-price">${formatRupiah(item.price)}</span>
+              ${
+                item.available
+                  ? `<button class="btn-add" onclick="openCustomize(${item.id})">+ Pilih</button>`
+                  : `<span class="badge-soldout">Habis</span>`
+              }
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openCustomize(itemId) {
+      const item = MENU_DATA.find(m => m.id === itemId);
+      if (!item || !item.available) return;
+      activeMenuItem = item;
+      selectedLevel = "Level 2";
+      modalQty = 1;
+
+      document.getElementById("modalTitle").textContent = item.name;
+      document.getElementById("modalTaste").textContent = item.taste;
+      document.getElementById("modalPrice").textContent = formatRupiah(item.price);
+      document.getElementById("modalDesc").textContent = item.desc;
+      document.getElementById("itemNote").value = "";
+      document.getElementById("modalQty").textContent = "1";
+
+      const spiceSec = document.getElementById("spicySection");
+      spiceSec.style.display = item.hasSpice ? "block" : "none";
+
+      if (item.hasSpice) {
+        document.getElementById("levelGrid").innerHTML = SPICE_LEVELS.map(lvl => `
+          <button
+            type="button"
+            class="level-btn ${lvl === selectedLevel ? "selected" : ""}"
+            onclick="pickLevel('${lvl}', this)"
+          >${lvl}</button>
+        `).join("");
+      }
+
+      document.getElementById("customModal").classList.add("open");
+    }
+
+    function pickLevel(lvl, btn) {
+      selectedLevel = lvl;
+      document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    }
+
+    function changeModalQty(delta) {
+      modalQty = Math.max(1, modalQty + delta);
+      document.getElementById("modalQty").textContent = modalQty;
+    }
+
+    function closeModal() {
+      document.getElementById("customModal").classList.remove("open");
+    }
+
+    function addCustomizedToCart() {
+      if (!activeMenuItem) return;
+      const note = document.getElementById("itemNote").value.trim();
+      const spice = activeMenuItem.hasSpice ? selectedLevel : null;
+
+      const existing = cart.find(
+        c => c.id === activeMenuItem.id && c.spice === spice && c.note === note
+      );
+      if (existing) {
+        existing.qty += modalQty;
+      } else {
+        cart.push({
+          id: activeMenuItem.id,
+          name: activeMenuItem.name,
+          price: activeMenuItem.price,
+          spice,
+          note,
+          qty: modalQty
+        });
+      }
+      closeModal();
+      updateFloatingCart();
+    }
+
+    function updateFloatingCart() {
+      const floatEl = document.getElementById("floatingCart");
+      const menuActive = document.getElementById("screenMenu").classList.contains("active");
+      const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+      const totalPrice = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
+
+      if (menuActive && totalQty > 0) {
+        document.getElementById("floatCount").textContent = `${totalQty} item dipilih`;
+        document.getElementById("floatTotal").textContent = formatRupiah(totalPrice);
+        floatEl.classList.add("visible");
+      } else {
+        floatEl.classList.remove("visible");
+      }
+    }
+
+    function openCheckout() {
+      if (!cart.length) return;
+      renderCartSummary();
+      showScreen("screenCheckout");
+    }
+
+    function renderCartSummary() {
+      const container = document.getElementById("cartItemsContainer");
+      if (!cart.length) {
+        container.innerHTML = `<div style="font-size:12px; color:var(--muted);">Keranjang kosong.</div>`;
+        document.getElementById("checkoutTotal").textContent = "Rp 0";
+        return;
+      }
+
+      container.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item-row">
+          <div>
+            <div style="font-weight:700;">${item.qty}x ${item.name}</div>
+            ${item.spice ? `<div style="font-size:11px; color:var(--magenta); font-weight:600;">Pedas: ${item.spice}</div>` : ""}
+            ${item.note ? `<div style="font-size:11px; color:var(--muted);">Catatan: "${item.note}"</div>` : ""}
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:700;">${formatRupiah(item.qty * item.price)}</div>
+            <button style="border:none; background:none; color:var(--red); font-size:11px; font-weight:700; cursor:pointer; margin-top:2px;" onclick="removeCartItem(${idx})">Hapus</button>
+          </div>
+        </div>
+      `).join("");
+
+      const total = cart.reduce((sum, i) => sum + i.qty * i.price, 0);
+      document.getElementById("checkoutTotal").textContent = formatRupiah(total);
+    }
+
+    function removeCartItem(idx) {
+      cart.splice(idx, 1);
+      renderCartSummary();
+      updateFloatingCart();
+      if (!cart.length) showScreen("screenMenu");
+    }
+
+    function submitOrder() {
+      if (!cart.length) return;
+      const name = document.getElementById("customerName").value.trim() || "Pelanggan";
+      const method = document.querySelector('input[name="payMethod"]:checked').value;
+      const total = cart.reduce((sum, i) => sum + i.qty * i.price, 0);
+      const code = `A-${String(++queueCounter).padStart(3, "0")}`;
+
+      const newOrder = {
+        code,
+        table: "Meja B-12",
+        customer: name,
+        method,
+        total,
+        status: method === "QRIS" ? "UNPAID_QRIS" : "UNPAID_CASHIER",
+        items: cart.map(i => ({ ...i }))
+      };
+
+      orders.unshift(newOrder);
+      activeOrderId = code;
+
+      const payBox = document.getElementById("paymentBox");
+      const btnPay = document.getElementById("btnConfirmPay");
+
+      if (method === "QRIS") {
+        payBox.innerHTML = `
+          <div style="font-size:12px; font-weight:700; color:var(--muted);">SCAN QRIS UNTUK BAYAR</div>
+          <div class="qr-placeholder"></div>
+          <div style="font-size:16px; font-weight:800; color:var(--magenta);">${formatRupiah(total)}</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:4px;">Antrean: <strong>${code}</strong> • Meja B-12</div>
+        `;
+        btnPay.textContent = "Simulasi Pembayaran QRIS Berhasil";
+        btnPay.style.display = "block";
+      } else {
+        payBox.innerHTML = `
+          <div style="font-size:34px; margin-bottom:8px;">🧾</div>
+          <div style="font-size:14px; font-weight:800;">Kode Pesanan: ${code}</div>
+          <p style="font-size:12px; color:var(--muted); margin-top:6px; line-height:1.45;">
+            Silakan tunjukkan kode <strong>${code}</strong> ke Kasir untuk melakukan pembayaran sebesar <strong>${formatRupiah(total)}</strong>, atau klik tombol di bawah untuk simulasi validasi kasir.
+          </p>
+        `;
+        btnPay.textContent = "Simulasi Kasir Validasi Pembayaran";
+        btnPay.style.display = "block";
+      }
+
+      showScreen("screenPayment");
+    }
+
+    function completePayment() {
+      const ord = orders.find(o => o.code === activeOrderId);
+      if (ord) {
+        ord.status = "QUEUE";
+      }
+      cart = [];
+      updateFloatingCart();
+      renderTracking();
+      showScreen("screenTracking");
+    }
+
+    function renderTracking() {
+      const ord = orders.find(o => o.code === activeOrderId) || orders[0];
+      if (!ord) return;
+
+      document.getElementById("trackQueueNumber").textContent = ord.code;
+      const banner = document.getElementById("queueBanner");
+      const headline = document.getElementById("trackHeadline");
+      const pickupBox = document.getElementById("pickupNoteBox");
+      const btnPickup = document.getElementById("btnPickupConfirm");
+
+      banner.classList.remove("ready");
+      btnPickup.style.display = "none";
+
+      let s1 = { cls: "done", icon: "✓" };
+      let s2 = { cls: "", icon: "2" };
+      let s3 = { cls: "", icon: "3" };
+
+      if (ord.status === "QUEUE") {
+        headline.textContent = "Pesanan Masuk Antrean Kitchen";
+        s2 = { cls: "active", icon: "•" };
+        pickupBox.innerHTML = `<strong>Info Pick-up:</strong> Pesanan Anda sedang menunggu giliran dimasak di dapur.`;
+      } else if (ord.status === "COOKING") {
+        headline.textContent = "Sedang Dimasak di Kitchen";
+        s2 = { cls: "done", icon: "✓" };
+        s3 = { cls: "active", icon: "•" };
+        pickupBox.innerHTML = `<strong>Info Pick-up:</strong> Koki sedang menyiapkan pesanan Anda. Bersiaplah menuju Lantai 1.`;
+      } else if (ord.status === "READY") {
+        headline.textContent = "SIAP DIAMBIL DI LANTAI 1!";
+        banner.classList.add("ready");
+        s2 = { cls: "done", icon: "✓" };
+        s3 = { cls: "done", icon: "✓" };
+        pickupBox.style.background = "var(--green-soft)";
+        pickupBox.style.borderColor = "#A7F3D0";
+        pickupBox.style.color = "#047857";
+        pickupBox.innerHTML = `<strong>Pesanan Siap!</strong> Silakan ambil pesanan Anda di <strong>Rak Pick-up Lantai 1</strong> dengan nomor antrean <strong>${ord.code}</strong>.`;
+        btnPickup.style.display = "block";
+      } else if (ord.status === "DONE") {
+        headline.textContent = "Pesanan Selesai Diambil";
+        s2 = { cls: "done", icon: "✓" };
+        s3 = { cls: "done", icon: "✓" };
+        pickupBox.innerHTML = `<strong>Terima kasih!</strong> Selamat menikmati hidangan Mie Gacoan.`;
+      }
+
+      document.getElementById("trackingSteps").innerHTML = `
+        <div class="step-item">
+          <div class="step-dot ${s1.cls}">${s1.icon}</div>
+          <div><strong>Pesanan Diterima Sistem</strong><div style="font-size:11px; color:var(--muted);">Atas nama ${ord.customer} (${ord.table})</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-dot ${s2.cls}">${s2.icon}</div>
+          <div><strong>Diproses Kitchen</strong><div style="font-size:11px; color:var(--muted);">Penyiapan mi, level pedas, dan minuman</div></div>
+        </div>
+        <div class="step-item">
+          <div class="step-dot ${s3.cls}">${s3.icon}</div>
+          <div><strong>Siap Diambil di Lantai 1</strong><div style="font-size:11px; color:var(--muted);">Pengambilan mandiri di area pick-up</div></div>
+        </div>
+      `;
+    }
+
+    function confirmPickedUp() {
+      const ord = orders.find(o => o.code === activeOrderId);
+      if (ord) {
+        ord.status = "DONE";
+      }
+      renderTracking();
+    }
+
+    function startNewOrder() {
+      showScreen("screenMenu");
+    }
+
+    function renderStaffOrders() {
+      const grid = document.getElementById("staffOrdersGrid");
+      if (!orders.length) {
+        grid.innerHTML = `<div class="empty-state">Belum ada tiket pesanan masuk.</div>`;
+        return;
+      }
+
+      grid.innerHTML = orders.map(ord => {
+        let badgeCls = "st-queue";
+        let badgeText = "Antre Masak";
+        if (ord.status.startsWith("UNPAID")) {
+          badgeCls = "st-unpaid";
+          badgeText = "Menunggu Bayar";
+        } else if (ord.status === "COOKING") {
+          badgeCls = "st-cooking";
+          badgeText = "Sedang Dimasak";
+        } else if (ord.status === "READY") {
+          badgeCls = "st-ready";
+          badgeText = "Siap Diambil (Lt. 1)";
+        } else if (ord.status === "DONE") {
+          badgeCls = "st-done";
+          badgeText = "Selesai";
+        }
+
+        let actionHtml = "";
+        if (ord.status.startsWith("UNPAID")) {
+          actionHtml = `<button class="btn-sm btn-blue" onclick="staffSetStatus('${ord.code}', 'QUEUE')">Validasi Bayar & Kirim ke Kitchen</button>`;
+        } else if (ord.status === "QUEUE") {
+          actionHtml = `<button class="btn-sm btn-blue" onclick="staffSetStatus('${ord.code}', 'COOKING')">Mulai Masak</button>`;
+        } else if (ord.status === "COOKING") {
+          actionHtml = `<button class="btn-sm btn-green" onclick="staffSetStatus('${ord.code}', 'READY')">Tandai Siap Diambil (Panggil Lt. 1)</button>`;
+        } else if (ord.status === "READY") {
+          actionHtml = `<button class="btn-sm btn-dark" onclick="staffSetStatus('${ord.code}', 'DONE')">Konfirmasi Diambil</button>`;
+        } else {
+          actionHtml = `<span style="font-size:11.5px; color:var(--muted);">Tiket telah selesai.</span>`;
+        }
+
+        const itemsHtml = ord.items.map(i => `
+          <div style="font-size:12px; margin-bottom:4px;">
+            • <strong>${i.qty}x ${i.name}</strong>
+            ${i.spice ? `<span style="color:var(--magenta); font-weight:700;">[${i.spice}]</span>` : ""}
+            ${i.note ? `<div style="font-size:11px; color:var(--muted); padding-left:10px;">Catatan: ${i.note}</div>` : ""}
+          </div>
+        `).join("");
+
+        return `
+          <div class="ticket-card">
+            <div>
+              <div class="ticket-top">
+                <span class="ticket-code">${ord.code}</span>
+                <span class="status-pill ${badgeCls}">${badgeText}</span>
+              </div>
+              <div style="font-size:12px; font-weight:700; margin-top:4px;">${ord.customer} • ${ord.table}</div>
+              <div style="font-size:11px; color:var(--muted); margin-bottom:10px;">Metode: ${ord.method}</div>
+              <div style="border-top:1px dashed var(--border); padding-top:8px;">
+                ${itemsHtml}
+              </div>
+            </div>
+            <div class="ticket-actions">${actionHtml}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function staffSetStatus(code, nextStatus) {
+      const ord = orders.find(o => o.code === code);
+      if (ord) {
+        ord.status = nextStatus;
+        activeOrderId = code;
+      }
+      renderStaffOrders();
+      renderTracking();
+    }
+
+    // Initial Render
+    renderMenu();
+    updateFloatingCart();
+  </script>
+</body>
+</html>
